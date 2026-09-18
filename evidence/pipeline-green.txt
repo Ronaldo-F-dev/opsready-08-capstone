@@ -1,0 +1,7 @@
+=== Pipeline CI vert - PR #7 (feat/health-uptime) ===
+Gitleaks: success | lint: success | test: success | Build/push: success | SonarCloud: success
+Deploy to VPS: skipped (event=pull_request, condition if:main non remplie)
+
+=== Pipeline CI vert - tag v1.4.0 (build+push image versionnee) ===
+lint: success | Gitleaks: success | test: success | SonarCloud: success | Build/push: success
+Deploy to VPS: skipped (ref=refs/tags/v1.4.0, condition if:main non remplie)

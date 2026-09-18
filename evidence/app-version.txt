@@ -1,0 +1,9 @@
+=== /health et /version via le Service actif (blue, v1.3.0) ===
+{"status":"ok","database":"ok","version":"1.3.0","details":null}
+{"name":"KPS Tasks API","version":"1.3.0","environment":"production"}
+
+=== /health et /version sur le nouveau pod green (v1.4.0, exec direct) ===
+{'status': 'ok', 'database': 'ok', 'version': '1.4.0', 'uptime_seconds': 23.88, 'details': None}
+{'name': 'KPS Tasks API', 'version': '1.4.0', 'environment': 'production'}
+
+Observation : seule la version v1.4.0 (green) expose le nouveau champ uptime_seconds -- preuve visuelle et fonctionnelle qu'il s'agit bien d'une nouvelle version, distincte de celle qui sert le trafic (blue, v1.3.0).

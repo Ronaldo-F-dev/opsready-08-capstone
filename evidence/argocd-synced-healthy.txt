@@ -1,0 +1,7 @@
+=== Rollout confirme sur green (v1.4.0) ===
+kps-tasks-api-green-85c47d487d-md8rh   1/1   Running   0
+image: ghcr.io/ronaldo-f-dev/kps-tasks-api:v1.4.0
+
+=== Rollout confirme sur blue (v1.3.0, correctif APP_VERSION applique) ===
+kps-tasks-api-blue-64d479c95d-l7wt2    1/1   Running   0
+image: ghcr.io/ronaldo-f-dev/kps-tasks-api:v1.3.0

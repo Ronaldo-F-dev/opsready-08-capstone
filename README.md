@@ -45,3 +45,21 @@ Documentation de synthèse écrite : [`architecture/final-architecture.md`](arch
 Les deux dépôts existants sont propres et l'infrastructure entière est saine. Documentation de synthèse en place. **Prêt pour le Jour 2** (répétition de la démo complète de bout en bout).
 
 ---
+
+## Jour 2 — Démonstration complète de la chaîne DevOps (terminé)
+
+Changement réel dérouled de bout en bout : ajout d'un champ `uptime_seconds` à `GET /health`.
+
+**Flux suivi** : branche → commit (`feat: report uptime_seconds in /health response`) → [PR #7](https://github.com/Ronaldo-F-dev/devops-prj3/pull/7) → pipeline CI vert (Gitleaks, lint, test, SonarCloud, build+push) → merge sur `main` → tag `v1.4.0` → image publiée sur le registre → tag mis à jour dans le dépôt GitOps (`deployment-green.yaml`, version standby, `blue` non affecté) → ArgoCD détecte et synchronise (`Synced`/`Healthy`) → rollout vérifié → `/health` du nouveau pod confirme `uptime_seconds` et `version: "1.4.0"` → visible dans Grafana (Prometheus) et Loki.
+
+**Deux découvertes réelles en cours de route** (pas seulement des commandes qui marchent du premier coup) :
+1. Le job CI `deploy` (héritage Projet 4, Docker Compose via SSH) reste bloqué en attente à chaque push sur `main` — obsolète depuis Kubernetes/ArgoCD, volontairement laissé tel quel, à expliquer en soutenance plutôt qu'à cacher.
+2. `blue` (version active) affichait `/version: "1.1.0"` alors que son image était déjà `v1.3.0` — variable d'environnement `APP_VERSION` désynchronisée par une mise à jour précédente. Corrigée par un commit GitOps d'une ligne, resynchronisée, vérifiée.
+
+Détail complet, étape par étape, avec le *pourquoi* de chaque choix : [`docs/day2-full-demo.md`](docs/day2-full-demo.md). Preuves : [`evidence/pipeline-green.txt`](evidence/pipeline-green.txt), [`evidence/registry-image.txt`](evidence/registry-image.txt), [`evidence/argocd-synced-healthy.txt`](evidence/argocd-synced-healthy.txt), [`evidence/app-version.txt`](evidence/app-version.txt), [`evidence/grafana-dashboard.txt`](evidence/grafana-dashboard.txt), [`evidence/loki-logs.txt`](evidence/loki-logs.txt).
+
+### Jour 2 — Résultat
+
+Chaîne complète démontrée sans aucune intervention manuelle sur Kubernetes (hors rafraîchissement ArgoCD, purement pour accélérer la démo). **Prêt pour le Jour 3** (incident déclenché et diagnostic structuré).
+
+---

@@ -1,0 +1,2 @@
+=== Grafana : pod green visible dans kube_pod_info ===
+kps-tasks-api-green-85c47d487d-md8rh

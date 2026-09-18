@@ -1,0 +1,4 @@
+=== Loki : logs applicatifs du nouveau pod green ===
+2026-09-18 19:07:56,183 INFO app GET /health -> 200 20.05ms
+2026-09-18 19:07:52,005 INFO app GET / -> 200 4.06ms
+INFO:     10.42.0.1:52270 - "GET /health HTTP/1.1" 200 OK
