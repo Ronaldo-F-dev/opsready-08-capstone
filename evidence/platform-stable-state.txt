@@ -1,0 +1,28 @@
+=== Etat stable de la plateforme - 2026-09-18T07:24:04Z ===
+
+-- Depot applicatif (devops-prj3) --
+git status : propre
+Tags: v1.0.0, v1.1.0, v1.2.0, v1.3.0
+
+-- Depot GitOps (kps-tasks-gitops) --
+git status : propre
+deployment-blue.yaml  -> v1.3.0 (actif)
+deployment-green.yaml -> v1.2.0 (standby)
+postgres-deployment.yaml -> postgres:16-alpine
+
+-- ArgoCD --
+kps-tasks-api-dev : Synced / Healthy
+
+-- Pods --
+kps-tasks : kps-tasks-api-blue (Running), kps-tasks-api-green (Running), postgres (Running) -- 0 redemarrage
+monitoring : 8 pods, tous Running (kube-prometheus-stack + loki + promtail)
+
+-- PrometheusRule --
+4 regles kps-tasks-api chargees (pod-alerts, app-alerts, resource-alerts)
+
+-- Acces externe --
+Application  (30080) -> HTTP 200
+Grafana      (30030) -> HTTP 200
+Prometheus   (30090) -> HTTP 302 (redirection normale)
+Alertmanager (30093) -> HTTP 200
+ArgoCD       (30843) -> HTTP 200

@@ -22,8 +22,26 @@ Ce projet **ne réécrit rien** : il consolide, démontre, documente et défend 
 
 ---
 
-## Jour 1 — Consolidation finale des dépôts et de la documentation (en cours)
+## Jour 1 — Consolidation finale des dépôts et de la documentation (terminé)
 
 ### Objectif du jour
 
 Nettoyer, structurer et finaliser les dépôts avant la soutenance — pas de nouveau code, juste vérifier que tout ce qui a été construit depuis le Projet 1 tient encore debout et est présentable.
+
+### Ce qui a été vérifié
+
+- **Dépôt applicatif propre** : 3 fichiers avaient des modifications non committées corrompues (texte mélangé de façon incohérente, pas des changements volontaires) — annulées (`git restore`). `.vscode/` et le fichier de notes personnelles `note.txt` ajoutés au `.gitignore`.
+- **Dépôt GitOps propre** : `git status` vide, tags d'image jamais `latest` (`v1.2.0` sur `green`, `v1.3.0` sur `blue`, cohérent avec l'état réellement déployé).
+- **Pipeline CI** : présent et fonctionnel (`.github/workflows/ci.yml`).
+- **ArgoCD** : `kps-tasks-api-dev` → `Synced` / `Healthy`.
+- **Dashboards Grafana, Loki, règles d'alerte** : toujours en place et opérationnels (4 `PrometheusRule` chargées, Loki/Promtail `Running`).
+- **Accès externe** : application, Grafana, Prometheus, Alertmanager, ArgoCD tous accessibles (HTTP 200/302 selon l'endpoint).
+- **Aucun secret réel exposé** dans les 3 dépôts (recherche de motifs `password`/`secret` en dur — rien trouvé hors fichiers `.example`).
+
+Documentation de synthèse écrite : [`architecture/final-architecture.md`](architecture/final-architecture.md), [`app-repo-summary/`](app-repo-summary/) (CI, versioning, sécurité/qualité), [`gitops-repo-summary/`](gitops-repo-summary/) (ArgoCD, sync/drift, blue/green, rollback), [`observability/`](observability/) (dashboards, Loki, alertes). Preuve de l'état stable : [`evidence/platform-stable-state.txt`](evidence/platform-stable-state.txt).
+
+### Jour 1 — Résultat
+
+Les deux dépôts existants sont propres et l'infrastructure entière est saine. Documentation de synthèse en place. **Prêt pour le Jour 2** (répétition de la démo complète de bout en bout).
+
+---
