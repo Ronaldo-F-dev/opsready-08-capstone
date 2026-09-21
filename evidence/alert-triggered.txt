@@ -1,0 +1,7 @@
+=== Alerte declenchee : KpsTaskApiPodNotReady ===
+state: pending (2026-09-21T06:26:03Z) -> firing (apres 2 min)
+pod: kps-tasks-api-green-786d9cc77b-8zt7b
+namespace: kps-tasks
+
+Requete Prometheus a l'origine de l'alerte :
+kube_pod_status_ready{namespace="kps-tasks", pod=~"kps-tasks-api-.*", condition="true"} == 0

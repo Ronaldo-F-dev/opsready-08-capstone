@@ -1,0 +1,14 @@
+=== Retour a la normale confirme ===
+
+-- Pods (kubectl get pods -n kps-tasks) --
+kps-tasks-api-blue-64d479c95d-l7wt2    1/1   Running   0
+kps-tasks-api-green-85c47d487d-md8rh   1/1   Running   0
+postgres-7777774646-tj2nn              1/1   Running   0
+(le pod casse kps-tasks-api-green-786d9cc77b-8zt7b a disparu -- remplace par l'ancien pod green, deja sain, jamais retire pendant l'incident)
+
+-- ArgoCD --
+kps-tasks-api-dev : Synced / Healthy
+
+-- Alerte apres correctif --
+KpsTaskApiPodNotReady : reste 'firing' quelques minutes, toujours associee au pod supprime (kps-tasks-api-green-786d9cc77b-8zt7b)
+-- fenetre de staleness normale de Prometheus, pas un signe que le correctif n'a pas fonctionne (meme comportement observe au Projet 7, Jour 5)

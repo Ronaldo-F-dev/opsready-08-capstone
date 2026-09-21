@@ -63,3 +63,27 @@ Détail complet, étape par étape, avec le *pourquoi* de chaque choix : [`docs/
 Chaîne complète démontrée sans aucune intervention manuelle sur Kubernetes (hors rafraîchissement ArgoCD, purement pour accélérer la démo). **Prêt pour le Jour 3** (incident déclenché et diagnostic structuré).
 
 ---
+
+## Jour 3 — Incident déclenché et diagnostic structuré (terminé)
+
+**Scénario choisi** (parmi la liste du brief) : **readinessProbe cassée**, sur `green` (standby, sans impact utilisateur) — volontairement différent de l'incident du Projet 7 (tag d'image invalide) pour couvrir un mode de panne distinct : un pod `Running` qui n'est jamais `Ready`, sans jamais redémarrer.
+
+**Déroulé** : chemin de la `readinessProbe` changé de `/health` vers `/healthz` (inexistant) dans le dépôt GitOps → ArgoCD synchronise → nouveau pod `green` bloqué `0/1 Ready`, `0` redémarrage.
+
+**Méthode de diagnostic suivie, dans l'ordre, sans commande au hasard** :
+1. Dashboard application (Grafana/Prometheus) → `kube_pod_status_ready{condition="false"}` confirmé
+2. Alertmanager/règles → `KpsTaskApiPodNotReady` `pending` puis `firing` (2 min, conforme au seuil)
+3. **Logs Loki (élément décisif)** → requêtes répétées `GET /healthz -> 404` toutes les ~10s, alors que `GET /` (liveness) répond `200` — isole immédiatement la cause
+4. ArgoCD → `Synced` (vient de Git) / `Progressing` (bloqué)
+5. `kubectl describe pod` → confirmation explicite : `Readiness probe failed: HTTP probe failed with statuscode: 404`
+6. `kubectl logs` → même confirmation au niveau du pod
+
+**Cause** : faute de frappe sur le chemin de la probe (`/healthz` au lieu de `/health`). **Correctif** : commit GitOps d'une ligne, resynchronisation, retour à la normale vérifié (`Synced`/`Healthy`, pod sain, 0 redémarrage). **Impact réel** : aucun (`blue` jamais affecté).
+
+Rapport complet et structuré : [`docs/final-incident-report.md`](docs/final-incident-report.md). Méthode générale réutilisable : [`observability/incident-diagnostic.md`](observability/incident-diagnostic.md). Preuves : [`evidence/alert-triggered.txt`](evidence/alert-triggered.txt), [`evidence/incident-resolution.txt`](evidence/incident-resolution.txt).
+
+### Jour 3 — Résultat
+
+Incident réel, diagnostiqué avec méthode complète (dashboards → alertes → logs → ArgoCD → kubectl), corrigé, documenté. **Prêt pour le Jour 4** (mini-lab Terraform).
+
+---
