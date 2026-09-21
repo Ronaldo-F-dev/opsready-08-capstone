@@ -1,0 +1,15 @@
+=== terraform apply (premiere execution, depuis un plan sauvegarde) ===
+docker_image.nginx: Creating...
+docker_image.nginx: Creation complete after 7s
+docker_container.nginx: Creating...
+docker_container.nginx: Creation complete after 1s
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+
+Outputs:
+container_name = "terraform-basics-nginx"
+nginx_url = "http://localhost:8090"
+
+=== Verification hors Terraform ===
+curl http://localhost:8090 -> HTTP 200
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                  NAMES
+624554e49251   65645c7bb6a0   "/docker-entrypoint.…"   20 seconds ago   Up 19 seconds   0.0.0.0:8090->80/tcp   terraform-basics-nginx

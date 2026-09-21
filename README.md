@@ -122,3 +122,32 @@ Rapport complet et structuré : [`docs/final-incident-report.md`](docs/final-inc
 Incident réel, diagnostiqué avec méthode complète (dashboards → alertes → logs → ArgoCD → kubectl), corrigé, documenté. **Prêt pour le Jour 4** (mini-lab Terraform).
 
 ---
+
+## Jour 4 — Mini-lab Terraform obligatoire (terminé)
+
+**Avertissement assumé** (demandé par le brief) : ce lab couvre les bases de Terraform, pas une expertise. Objectif : pouvoir en parler honnêtement en entretien.
+
+Lab dans [`terraform-basics/`](terraform-basics/) — provider [`kreuzwerker/docker`](https://registry.terraform.io/providers/kreuzwerker/docker/latest), crée un conteneur Nginx :
+
+```bash
+terraform init      # telecharge le provider Docker
+terraform plan       # 2 ressources a creer (image + conteneur)
+terraform apply       # cree reellement le conteneur
+terraform output       # http://localhost:8090
+curl http://localhost:8090   # -> HTTP 200, verifie hors Terraform
+terraform destroy       # supprime tout
+```
+
+Toutes les commandes exécutées pour de vrai (pas seulement documentées) : `init` → `plan` → `apply` → `output` → vérification HTTP indépendante → nouveau `plan` confirmant `No changes` (idempotence) → `destroy` → conteneur bien disparu (`docker ps` vide, connexion refusée).
+
+**Concepts expliqués** (IaC, provider, resource, state, variable, output, cycle init/plan/apply/destroy, Terraform vs Ansible, Terraform vs ArgoCD) : [`terraform-basics/README.md`](terraform-basics/README.md).
+
+**Sécurité** : `terraform.tfstate` jamais committé (`.gitignore`), rôle et contenu sensible du state expliqués. Un oubli initial corrigé en cours de route : le fichier de plan (`tfplan`) n'était pas dans `.gitignore` — ajouté, car un plan peut aussi exposer des valeurs sensibles.
+
+Preuves : [`evidence/terraform-init.txt`](evidence/terraform-init.txt), [`evidence/terraform-plan.txt`](evidence/terraform-plan.txt), [`evidence/terraform-apply.txt`](evidence/terraform-apply.txt), [`evidence/terraform-destroy.txt`](evidence/terraform-destroy.txt).
+
+### Jour 4 — Résultat
+
+Mini-lab exécuté de bout en bout, concepts expliqués honnêtement, aucun state committé. **Prêt pour le Jour 5** (soutenance finale).
+
+---
