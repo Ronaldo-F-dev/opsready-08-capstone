@@ -28,15 +28,50 @@ Ce projet **ne réécrit rien** : il consolide, démontre, documente et défend 
 
 Nettoyer, structurer et finaliser les dépôts avant la soutenance — pas de nouveau code, juste vérifier que tout ce qui a été construit depuis le Projet 1 tient encore debout et est présentable.
 
-### Ce qui a été vérifié
+### Checklist des 10 tâches du brief
 
-- **Dépôt applicatif propre** : 3 fichiers avaient des modifications non committées corrompues (texte mélangé de façon incohérente, pas des changements volontaires) — annulées (`git restore`). `.vscode/` et le fichier de notes personnelles `note.txt` ajoutés au `.gitignore`.
-- **Dépôt GitOps propre** : `git status` vide, tags d'image jamais `latest` (`v1.2.0` sur `green`, `v1.3.0` sur `blue`, cohérent avec l'état réellement déployé).
-- **Pipeline CI** : présent et fonctionnel (`.github/workflows/ci.yml`).
-- **ArgoCD** : `kps-tasks-api-dev` → `Synced` / `Healthy`.
-- **Dashboards Grafana, Loki, règles d'alerte** : toujours en place et opérationnels (4 `PrometheusRule` chargées, Loki/Promtail `Running`).
-- **Accès externe** : application, Grafana, Prometheus, Alertmanager, ArgoCD tous accessibles (HTTP 200/302 selon l'endpoint).
+| # | Tâche | Vérification effectuée |
+|---|---|---|
+| 1 | Vérifier le dépôt applicatif | `git status` propre après correction (voir ci-dessous) ; code, `Dockerfile`, tests, pipeline CI, `.env.example`, `CHANGELOG.md`, `README.md` tous présents |
+| 2 | Vérifier le dépôt GitOps | `git status` propre ; manifestes blue/green cohérents avec l'état réellement déployé |
+| 3 | Vérifier le pipeline CI | `.github/workflows/ci.yml` présent, jobs `lint`/`test`/`secret_scan`/`sonar`/`docker_build` fonctionnels (revérifié en conditions réelles au Jour 2) ; doc CI existante ([`docs/prj3/ci-pipeline.md`](https://github.com/Ronaldo-F-dev/devops-prj3/blob/main/docs/prj3/ci-pipeline.md)) et job `deploy` documenté séparément ([`docs/prj4/deployment-process.md`](https://github.com/Ronaldo-F-dev/devops-prj3/blob/main/docs/prj4/deployment-process.md)) |
+| 4 | Vérifier les tags d'image | Jamais `latest` : `v1.2.0` (green), `v1.3.0` (blue) au moment du Jour 1 |
+| 5 | Vérifier les manifestes Kubernetes | `deployment-blue.yaml`/`deployment-green.yaml`/`app-service.yaml`/`postgres-*.yaml` présents et cohérents |
+| 6 | Vérifier ArgoCD | Voir détail ci-dessous |
+| 7 | Vérifier les dashboards Grafana | 2 dashboards (infra + application) toujours présents, Grafana accessible (HTTP 200) |
+| 8 | Vérifier Loki | Voir détail ci-dessous |
+| 9 | Vérifier les règles d'alerte | 4 `PrometheusRule` chargées (`pod-alerts`, `app-alerts`, `resource-alerts`), toutes `health: ok` |
+| 10 | Finaliser la documentation globale | Ce README + résumés `app-repo-summary/`, `gitops-repo-summary/`, `observability/`, `architecture/` |
+
+### Ce qui a été trouvé et corrigé (pas juste "tout est vert")
+
+- **Dépôt applicatif** : 3 fichiers avaient des modifications non committées corrompues (texte mélangé de façon incohérente, pas des changements volontaires) — annulées (`git restore`). `.vscode/` et le fichier de notes personnelles `note.txt` ajoutés au `.gitignore`.
+- **`CHANGELOG.md` incomplet** : ne contenait qu'une entrée `v1.0.0`, alors que 4 tags supplémentaires existaient (`v1.1.0` → `v1.4.0`) sans jamais avoir été documentés. Corrigé avec une entrée par version, reconstruite depuis `git log` entre chaque tag.
 - **Aucun secret réel exposé** dans les 3 dépôts (recherche de motifs `password`/`secret` en dur — rien trouvé hors fichiers `.example`).
+
+### Vérification détaillée — ArgoCD (tâche 6)
+
+```
+kubectl get application kps-tasks-api-dev -n argocd -o jsonpath=...
+Namespace cible : kps-tasks
+Dépôt source    : https://github.com/Ronaldo-F-dev/kps-tasks-gitops.git
+Chemin          : apps/kps-tasks-api
+Sync policy     : automated
+Sync status     : Synced
+Health status   : Healthy
+Revision        : correspond exactement au dernier commit du dépôt GitOps (vérifié avec `git log -1`)
+```
+
+Les 7 pods `argocd-*` sont `Running`. La révision suivie par ArgoCD correspond bit à bit au commit `HEAD` du dépôt GitOps — confirmation qu'ArgoCD ne suit pas un état périmé.
+
+### Vérification détaillée — Loki (tâche 8)
+
+```
+kubectl get pods -n monitoring -l app=loki        -> loki-0 Running
+kubectl get pods -n monitoring -l app.kubernetes.io/name=promtail  -> loki-promtail-<hash> Running
+```
+
+Namespaces couverts (`/loki/api/v1/label/namespace/values`) : `argocd`, `kps-tasks`, `kube-system`, `monitoring` — toutes les sources attendues. Test de bout en bout : une requête `GET /health` envoyée à l'application, retrouvée dans Loki en moins de 10 secondes. Source de données Loki confirmée dans Grafana (`type: loki`, `url: http://loki:3100`), aux côtés de Prometheus et Alertmanager.
 
 Documentation de synthèse écrite : [`architecture/final-architecture.md`](architecture/final-architecture.md), [`app-repo-summary/`](app-repo-summary/) (CI, versioning, sécurité/qualité), [`gitops-repo-summary/`](gitops-repo-summary/) (ArgoCD, sync/drift, blue/green, rollback), [`observability/`](observability/) (dashboards, Loki, alertes). Preuve de l'état stable : [`evidence/platform-stable-state.txt`](evidence/platform-stable-state.txt).
 

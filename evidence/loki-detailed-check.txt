@@ -1,0 +1,10 @@
+=== Loki - verification approfondie (Jour 1) ===
+loki-0 : Running (12j)
+loki-promtail-zst54 : Running (12j) -- label correct : app.kubernetes.io/name=promtail
+
+Namespaces couverts : argocd, kps-tasks, kube-system, monitoring
+
+Test bout-en-bout : GET /health envoye -> retrouve dans Loki en moins de 10s :
+2026-09-21 14:27:39,943 INFO app GET /health -> 200 12.10ms
+
+Datasource Grafana : Loki | loki | http://loki:3100 (confirmee, aux cotes de Prometheus et Alertmanager)

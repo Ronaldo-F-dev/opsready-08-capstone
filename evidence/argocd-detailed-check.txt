@@ -1,0 +1,12 @@
+=== ArgoCD - verification approfondie (Jour 1) ===
+Namespace cible : kps-tasks
+Depot source    : https://github.com/Ronaldo-F-dev/kps-tasks-gitops.git
+Chemin          : apps/kps-tasks-api
+Sync policy     : automated
+Sync status     : Synced
+Health status   : Healthy
+Revision suivie : 69c2c464b87d4a835eca709e398d4bc3fc4323bc
+HEAD du depot GitOps (git log -1) : 69c2c46 fix(prj8): restore correct readinessProbe path (/health) on green deployment
+-> correspondance exacte confirmee
+
+7 pods argocd-* : tous Running
