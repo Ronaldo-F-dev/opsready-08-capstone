@@ -151,3 +151,42 @@ Preuves : [`evidence/terraform-init.txt`](evidence/terraform-init.txt), [`eviden
 Mini-lab exécuté de bout en bout, concepts expliqués honnêtement, aucun state committé. **Prêt pour le Jour 5** (soutenance finale).
 
 ---
+
+## Jour 5 — Soutenance finale en posture client (terminé)
+
+Tous les livrables finaux du brief rédigés :
+
+- **Support de soutenance** (trame complète, 6 parties, 30-45 min) : [`docs/final-soutenance.md`](docs/final-soutenance.md)
+- **Checklists opérationnelles** : [`docs/deployment-checklist.md`](docs/deployment-checklist.md), [`docs/rollback-checklist.md`](docs/rollback-checklist.md), [`docs/diagnostic-checklist.md`](docs/diagnostic-checklist.md)
+- **Limites et améliorations**, consolidées avec la source exacte de chaque limite trouvée dans les Jours 1-4 : [`docs/limitations-and-improvements.md`](docs/limitations-and-improvements.md)
+- **ADR principal** (blue/green) résumé et lié : [`architecture/adr-summary.md`](architecture/adr-summary.md)
+- **Bilan personnel** : squelette avec questions guides préparé — [`docs/bilan-personnel.md`](docs/bilan-personnel.md), **à compléter avec tes propres mots avant la soutenance**, ce n'est pas quelque chose que je peux écrire à ta place de façon honnête.
+
+### Jour 5 — Résultat
+
+Tous les livrables finaux du brief (39 à 58) sont en place. **Projet 8 terminé.**
+
+| Livrable | Emplacement |
+|---|---|
+| Dépôt applicatif final | [`devops-prj3`](https://github.com/Ronaldo-F-dev/devops-prj3) |
+| Dépôt GitOps final | [`kps-tasks-gitops`](https://github.com/Ronaldo-F-dev/kps-tasks-gitops) |
+| Pipeline CI/CD documenté | [`app-repo-summary/ci-pipeline.md`](app-repo-summary/ci-pipeline.md) |
+| Image Docker versionnée | `v1.4.0`, [`evidence/registry-image.txt`](evidence/registry-image.txt) |
+| Manifestes Kubernetes | [`gitops-repo-summary/`](gitops-repo-summary/) |
+| Application ArgoCD | [`gitops-repo-summary/argocd-application.md`](gitops-repo-summary/argocd-application.md) |
+| Dashboards Grafana | [`observability/grafana-dashboards.md`](observability/grafana-dashboards.md) |
+| Règles d'alerte | [`observability/alerting-rules.md`](observability/alerting-rules.md) |
+| Configuration Loki/Promtail | [`observability/loki-logs.md`](observability/loki-logs.md) |
+| Documentation de diagnostic | [`observability/incident-diagnostic.md`](observability/incident-diagnostic.md), [`docs/diagnostic-checklist.md`](docs/diagnostic-checklist.md) |
+| Rapport d'incident final | [`docs/final-incident-report.md`](docs/final-incident-report.md) |
+| Diagramme d'architecture final | [`architecture/final-architecture.md`](architecture/final-architecture.md) |
+| ADR principaux | [`architecture/adr-summary.md`](architecture/adr-summary.md) |
+| Support de soutenance | [`docs/final-soutenance.md`](docs/final-soutenance.md) |
+| Mini-lab Terraform | [`terraform-basics/`](terraform-basics/) |
+| README global | ce fichier |
+| Checklist de déploiement | [`docs/deployment-checklist.md`](docs/deployment-checklist.md) |
+| Checklist de rollback | [`docs/rollback-checklist.md`](docs/rollback-checklist.md) |
+| Checklist de diagnostic | [`docs/diagnostic-checklist.md`](docs/diagnostic-checklist.md) |
+| Bilan personnel | [`docs/bilan-personnel.md`](docs/bilan-personnel.md) (squelette — à compléter) |
+
+---
